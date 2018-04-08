@@ -2470,7 +2470,7 @@ void gcode_M701()
 	custom_message_type = 2;
 
 	lcd_setstatuspgm(MSG_LOADING_FILAMENT);
-	current_position[E_AXIS] += 55;
+	current_position[E_AXIS] += 60;
 	plan_buffer_line(current_position[X_AXIS], current_position[Y_AXIS], current_position[Z_AXIS], current_position[E_AXIS], 400 / 60, active_extruder); //fast sequence
 
 	current_position[E_AXIS] += 25;
@@ -6398,7 +6398,7 @@ Sigma_Exit:
 		gcode_M701();
 	}
 	break;
-	case 702:
+	    case 702: //M702: unload filament
 	{
 #ifdef SNMM
 		if (code_seen('U')) {
