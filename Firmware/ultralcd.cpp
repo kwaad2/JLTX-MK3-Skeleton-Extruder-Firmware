@@ -1752,10 +1752,10 @@ static void lcd_preheat_menu()
   MENU_ITEM(back, MSG_MAIN, 0);
 
   if (farm_mode) {
-	  MENU_ITEM(function, PSTR("farm    -  " STRINGIFY(FARM_PREHEAT_HOTEND_TEMP) "/" STRINGIFY(FARM_PREHEAT_HPB_TEMP)), lcd_preheat_farm);
-	  MENU_ITEM(function, PSTR("nozzle  -  " STRINGIFY(FARM_PREHEAT_HOTEND_TEMP) "/0"), lcd_preheat_farm_nozzle);
+	  MENU_ITEM(function, PSTR("farm   -  " STRINGIFY(FARM_PREHEAT_HOTEND_TEMP) "/" STRINGIFY(FARM_PREHEAT_HPB_TEMP)), lcd_preheat_farm);
+	  MENU_ITEM(function, PSTR("nozzle -  " STRINGIFY(FARM_PREHEAT_HOTEND_TEMP) "/0"), lcd_preheat_farm_nozzle);
 	  MENU_ITEM(function, MSG_COOLDOWN, lcd_cooldown);
-	  MENU_ITEM(function, PSTR("ABS     -  " STRINGIFY(ABS_PREHEAT_HOTEND_TEMP) "/" STRINGIFY(ABS_PREHEAT_HPB_TEMP)), lcd_preheat_abs);
+	  MENU_ITEM(function, PSTR("ABS    -  " STRINGIFY(ABS_PREHEAT_HOTEND_TEMP) "/" STRINGIFY(ABS_PREHEAT_HPB_TEMP)), lcd_preheat_abs);
   } else {
 	  MENU_ITEM(function, PSTR("PLA  -  " STRINGIFY(PLA_PREHEAT_HOTEND_TEMP) "/" STRINGIFY(PLA_PREHEAT_HPB_TEMP)), lcd_preheat_pla);
 	  MENU_ITEM(function, PSTR("PET  -  " STRINGIFY(PET_PREHEAT_HOTEND_TEMP) "/" STRINGIFY(PET_PREHEAT_HPB_TEMP)), lcd_preheat_pet);
@@ -1834,9 +1834,9 @@ static void lcd_support_menu()
     
   MENU_ITEM(submenu, MSG_MENU_TEMPERATURES, lcd_menu_temperatures);
 
-#if defined (VOLT_BED_PIN) || defined (VOLT_BED_PIN)
+#if defined (VOLT_BED_PIN) || defined (VOLT_PWR_PIN)
   MENU_ITEM(submenu, MSG_MENU_VOLTAGES, lcd_menu_voltages);
-#endif //defined VOLT_BED_PIN || defined VOLT_BED_PIN
+#endif //defined VOLT_BED_PIN || defined VOLT_PWR_PIN
 
 #ifdef DEBUG_BUILD
   MENU_ITEM(submenu, PSTR("Debug"), lcd_menu_debug);
@@ -3505,8 +3505,12 @@ static void lcd_fsensor_fail()
 static void lcd_silent_mode_set() {
 	switch (SilentModeMenu) {
 	case 0: SilentModeMenu = 1; break;
+#ifdef TMC2130
+	case 1: SilentModeMenu = 0; break;
+#else
 	case 1: SilentModeMenu = 2; break;
 	case 2: SilentModeMenu = 0; break;
+#endif //TMC2130
 	default: SilentModeMenu = 0; break;
 	}
   eeprom_update_byte((unsigned char *)EEPROM_SILENT, SilentModeMenu);
